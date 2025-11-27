@@ -1,33 +1,40 @@
 package com.example.ham.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "products") // table MySQL = products
+@Table(name = "products")
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;           // identifiant auto-incrémenté
+    private Integer id;
 
     @Column(nullable = false, length = 150)
-    private String name;          // nom du produit
+    private String name;
 
     @Column(length = 500)
-    private String description;   // description optionnelle
+    private String description;
 
     @Column(nullable = false)
-    private Double price;         // prix
+    private Double price;
 
     @Column(nullable = false)
-    private Integer quantity;     // stock
+    private Integer quantity;
 
     @Column(nullable = false)
-    private Boolean active;       // produit actif ou non
+    private Boolean active;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt; // date de création (automatique)
+    private LocalDateTime createdAt;
+
+    // ManyToOne : N products -> 1 user
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")   // clé étrangère dans la table products
+    @JsonIgnore                     // pour éviter boucle infinie JSON
+    private User owner;
 
     public Product() {
     }
@@ -44,14 +51,13 @@ public class Product {
         this.createdAt = createdAt;
     }
 
-    // On remplit createdAt automatiquement avant INSERT
     @PrePersist
     public void prePersist() {
         if (createdAt == null) {
             createdAt = LocalDateTime.now();
         }
         if (active == null) {
-            active = true; // par défaut actif
+            active = true;
         }
     }
 
@@ -111,5 +117,13 @@ public class Product {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 }
