@@ -22,19 +22,18 @@ public class UserService {
 
     // READ one
     public User getUserById(int id) {
-        return repo.findById(id);
+        return repo.findById(id).orElse(null);
     }
 
     // CREATE
     public User createUser(User user) {
-        // on laisse l'id à null, le repo va le générer
-        user.setId(null);
+        // id sera généré automatiquement côté DB
         return repo.save(user);
     }
 
     // UPDATE
     public User updateUser(int id, User user) {
-        User existing = repo.findById(id);
+        User existing = repo.findById(id).orElse(null);
         if (existing == null) {
             return null;
         }
@@ -44,7 +43,7 @@ public class UserService {
 
     // DELETE
     public boolean deleteUser(int id) {
-        User existing = repo.findById(id);
+        User existing = repo.findById(id).orElse(null);
         if (existing == null) {
             return false;
         }

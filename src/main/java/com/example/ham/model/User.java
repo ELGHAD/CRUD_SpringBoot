@@ -1,7 +1,16 @@
 package com.example.ham.model;
 
+import jakarta.persistence.*;
+
+@Entity                      // dit que c'est une entité JPA
+@Table(name = "users")       // nom de la table dans MySQL
 public class User {
-    private Integer id;   // <--- Integer au lieu de int
+
+    @Id                      // clé primaire
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment MySQL
+    private Integer id;
+
+    @Column(nullable = false, length = 100)
     private String name;
 
     public User() {
@@ -16,7 +25,7 @@ public class User {
         return id;
     }
 
-    public void setId(Integer id) {  // accepte null
+    public void setId(Integer id) {
         this.id = id;
     }
 

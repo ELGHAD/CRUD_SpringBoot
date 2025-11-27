@@ -17,13 +17,11 @@ public class UserController {
         this.service = service;
     }
 
-    // READ all : GET /users
     @GetMapping
     public List<User> getAll() {
         return service.getAllUsers();
     }
 
-    // READ one : GET /users/1
     @GetMapping("/{id}")
     public ResponseEntity<User> getOne(@PathVariable int id) {
         User user = service.getUserById(id);
@@ -33,14 +31,11 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    // CREATE : POST /users
     @PostMapping
     public User create(@RequestBody User user) {
-        System.out.println(">>> POST /users, name = " + user.getName());
         return service.createUser(user);
     }
 
-    // UPDATE : PUT /users/1
     @PutMapping("/{id}")
     public ResponseEntity<User> update(@PathVariable int id,
                                        @RequestBody User user) {
@@ -51,7 +46,6 @@ public class UserController {
         return ResponseEntity.ok(updated);
     }
 
-    // DELETE : DELETE /users/1
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         boolean deleted = service.deleteUser(id);
